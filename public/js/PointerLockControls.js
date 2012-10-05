@@ -15,7 +15,7 @@ var PointerLockControls = function ( socket ) {
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
 		if (movementY && movementX) {
-			socket.emit('mouse_move': { x: movementX, y: movementY });
+			socket.emit('mousemove': { x: movementX, y: movementY });
 		}
 	};
 
@@ -46,6 +46,7 @@ var PointerLockControls = function ( socket ) {
 				moveRight = true;
 				break;
 			case 32: // space
+				socket
 				break;
 		}
 
