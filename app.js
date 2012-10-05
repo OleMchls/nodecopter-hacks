@@ -53,19 +53,6 @@ http = http.createServer(app).listen(app.get('port'), function(){
 io = io.listen(http);
 
 
-
-var lastPng;
-pngStream = client.createPngStream();
-pngStream
-  //.on('error', console.log)
-  .on('data', function(pngBuffer) {
-    lastPng = pngBuffer;
-  });
-
-client.on('navdata', function(data) {
-  console.log('recieving navdata');
-});
-
 var speed = 0.1;
 var mouseSensibility = 10;
 

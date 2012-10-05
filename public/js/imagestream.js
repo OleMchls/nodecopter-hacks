@@ -7,7 +7,6 @@
 	img.src = 'image.png'
 
 	img.onload = function() {
-		console.log(this.src)
 		el.style.backgroundImage = 'url('+this.src+')'
 	}
 
@@ -17,5 +16,5 @@
 	setInterval(function() {
 		img.src = ('/image.png?' + (i++))
 		//el.style.backgroundImage = ('url(/image.png?' + (i++) + ')')
-	}, 100)
+	}, 500)
 })()
