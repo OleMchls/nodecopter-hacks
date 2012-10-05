@@ -8,32 +8,19 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , arDrone = require('ar-drone');
+  , arDrone = require('ar-drone')
+  , io = require('socket.io');
 
 var client = arDrone.createClient();
 
-client.takeoff();
+client.on('navdata', function() {
+  console.log('recieving navdata');
+});
 
-client
-  /*.after(5000, function() {
-    this.clockwise(0.5);
-  })*/
-  .after(2000, function() {
-    this.front(0.5);
-  })
-  .after(2000, function() {
-    this.left(0.5);
-  })
-  .after(2000, function() {
-    this.back(0.5);
-  })
-  .after(2000, function() {
-    this.right(0.5);
-  })
-  .after(3000, function() {
-    this.stop();
-    this.land();
-  });
+/*var pngStream = client.createPngStream();
+pngStream.on('data', console.log);*/
+
+//client.takeoff();
 
 var app = express();
 
@@ -56,6 +43,14 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+http = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+});
+
+io = io.listen(http);
+
+io.sockets.on('connection', function (socket) {
+  socket.on('movement', function (data) {
+    console.log(data);
+  });
 });
