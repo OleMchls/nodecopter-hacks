@@ -8,34 +8,20 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , arDrone = require('ar-drone');
+  , arDrone = require('ar-drone')
+  , fs = require('fs');
 
 var client = arDrone.createClient();
 
-client.takeoff();
-
-client
-  /*.after(5000, function() {
-    this.clockwise(0.5);
-  })*/
-  .after(2000, function() {
-    this.front(0.5);
-  })
-  .after(2000, function() {
-    this.left(0.5);
-  })
-  .after(2000, function() {
-    this.back(0.5);
-  })
-  .after(2000, function() {
-    this.right(0.5);
-  })
-  .after(3000, function() {
-    this.stop();
-    this.land();
-  });
-
 var app = express();
+
+var lastPng;
+pngStream = client.createPngStream();
+pngStream
+  .on('error', console.log)
+  .on('data', function(pngBuffer) {
+    lastPng = pngBuffer;
+  });
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -54,7 +40,14 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/image.png', function(req, res) {
+  res.writeHead(200, {'Content-Type': 'image/png'});
+  fs.readFile('./test/image.png', function (err, data) {
+    if (err) throw err;
+    res.end(data);
+  });
+  //res.end(lastPng);
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
