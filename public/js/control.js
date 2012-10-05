@@ -2,6 +2,8 @@
 var controls,time = Date.now();
 
 var objects = [];
+var is_takeoff = true;
+var is_land = true;
 
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
@@ -20,7 +22,7 @@ if ( havePointerLock ) {
 
 			blocker.style.display = 'none';
 
-			socket.emit('takeoff');
+			takeoff();
 
 		} else {
 
@@ -31,7 +33,7 @@ if ( havePointerLock ) {
 			blocker.style.display = 'box';
 
 			instructions.style.display = '';
-			socket.emit('land');
+			land();
 			
 
 		}
@@ -41,7 +43,7 @@ if ( havePointerLock ) {
 	var pointerlockerror = function ( event ) {
 
 		instructions.style.display = '';
-		socket.emit('land');
+		land();
 
 	}
 
@@ -116,5 +118,24 @@ function control() {
 	setInterval(function() {
 		controls.update( );
 	}, 50);
+}
+
+function takeoff() {
+	if (is_takeoff == false) {
+		socket.emit('takeoff');
+		controls.enabled = true;
+	}
+
+	is_land = false;
+}
+
+function land() {
+	if (is_land == false) {
+		controls.enabled = false;
+		socket.emit('land');
+	}
+
+	is_takeoff = false;
+
 }
 
