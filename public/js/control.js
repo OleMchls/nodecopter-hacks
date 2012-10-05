@@ -20,7 +20,7 @@ if ( havePointerLock ) {
 
 			blocker.style.display = 'none';
 
-			socket.emit('land');
+			socket.emit('takeoff');
 
 		} else {
 
@@ -31,8 +31,8 @@ if ( havePointerLock ) {
 			blocker.style.display = 'box';
 
 			instructions.style.display = '';
-
-			socket.emit('takeoff');
+			socket.emit('land');
+			
 
 		}
 
