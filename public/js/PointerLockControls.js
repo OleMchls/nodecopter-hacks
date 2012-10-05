@@ -14,10 +14,9 @@ var PointerLockControls = function ( socket ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		// push the event
-		console.log('movement', movementX, movementY);
-		var mouseMoveX = movementX;
-		var mouseMoveY = movementY;
+		if (movementY && movementX) {
+			socket.emit('mouse_move': { x: movementX, y: movementY });
+		}
 	};
 
 	var onKeyDown = function ( event ) {
@@ -26,21 +25,27 @@ var PointerLockControls = function ( socket ) {
 
 			case 38: // up
 			case 87: // w
+				socket.emit('movement', { directions: [ {forward: true} ] });
 				moveForward = true;
 				break;
 
 			case 37: // left
 			case 65: // a
-				moveLeft = true; break;
-
+				socket.emit('movement', { directions: [ {left: true} ] });
+				moveLeft = true;
+				break;
 			case 40: // down
 			case 83: // s
+				socket.emit('movement', { directions: [ {backward: true} ] });
 				moveBackward = true;
 				break;
 
 			case 39: // right
 			case 68: // d
+				socket.emit('movement', { directions: [ {right: true} ] });
 				moveRight = true;
+				break;
+			case 32: // space
 				break;
 		}
 
@@ -52,21 +57,25 @@ var PointerLockControls = function ( socket ) {
 
 			case 38: // up
 			case 87: // w
+				socket.emit('movement', { directions: [ {forward: false} ] });
 				moveForward = false;
 				break;
 
 			case 37: // left
 			case 65: // a
+				socket.emit('movement', { directions: [ {left: false} ] });
 				moveLeft = false;
 				break;
 
 			case 40: // down
 			case 83: // a
+				socket.emit('movement', { directions: [ {backward: false} ] });
 				moveBackward = false;
 				break;
 
 			case 39: // right
 			case 68: // d
+				socket.emit('movement', { directions: [ {'right': false} ]  });
 				moveRight = false;
 				break;
 

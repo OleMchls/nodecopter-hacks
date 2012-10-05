@@ -95,7 +95,7 @@ init();
 animate();
 
 function init() {
-	controls = new PointerLockControls( {} );
+	controls = new PointerLockControls( socket );
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
