@@ -44,7 +44,7 @@ var PointerLockControls = function ( socket ) {
 				moveRight = true;
 				break;
 			case 32: // space
-				socket.emit('flip', { flip: 'it'} );
+				socket.emit('animation', ['flipAhead', 1000] );
 				break;
 		}
 
