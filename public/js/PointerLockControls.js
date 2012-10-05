@@ -14,10 +14,9 @@ var PointerLockControls = function ( socket ) {
 		var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
-		// push the event
-		console.log('movement', movementX, movementY);
-		var mouseMoveX = movementX;
-		var mouseMoveY = movementY;
+		if (movementY || movementX) {
+			//socket.emit('mousemove', { x: movementX, y: movementY });
+		}
 	};
 
 	var onKeyDown = function ( event ) {
@@ -31,8 +30,8 @@ var PointerLockControls = function ( socket ) {
 
 			case 37: // left
 			case 65: // a
-				moveLeft = true; break;
-
+				moveLeft = true;
+				break;
 			case 40: // down
 			case 83: // s
 				moveBackward = true;
@@ -41,6 +40,9 @@ var PointerLockControls = function ( socket ) {
 			case 39: // right
 			case 68: // d
 				moveRight = true;
+				break;
+			case 32: // space
+				socket.emit('flip', { flip: 'it'} );
 				break;
 		}
 
@@ -82,31 +84,9 @@ var PointerLockControls = function ( socket ) {
 
 	this.update = function ( delta ) {
 
-		if ( scope.enabled === false ) return;
+		//if ( scope.enabled === false ) return;
 
-		delta *= 0.1;
-
-		velocity.x += ( - velocity.x ) * 0.08 * delta;
-		velocity.z += ( - velocity.z ) * 0.08 * delta;
-
-		velocity.y -= 0.25 * delta;
-
-		if ( moveForward ) velocity.z -= 0.12 * delta;
-		if ( moveBackward ) velocity.z += 0.12 * delta;
-
-		if ( moveLeft ) velocity.x -= 0.12 * delta;
-		if ( moveRight ) velocity.x += 0.12 * delta;
-
-		if ( isOnObject === true ) {
-
-			velocity.y = Math.max( 0, velocity.y );
-
-		}
-
-		if ( yawObject.position.y < 10 ) {
-
-			velocity.y = 0;
-		}
+		socket.emit('movement', { directions: [ {forward: moveForward}, {right: moveRight}, {backward: moveBackward}, {left: moveLeft}], mouse: [0, 0]});
 
 	};
 

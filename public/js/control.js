@@ -20,6 +20,8 @@ if ( havePointerLock ) {
 
 			blocker.style.display = 'none';
 
+			socket.emit('land');
+
 		} else {
 
 			controls.enabled = false;
@@ -30,6 +32,8 @@ if ( havePointerLock ) {
 
 			instructions.style.display = '';
 
+			socket.emit('takeoff');
+
 		}
 
 	}
@@ -37,6 +41,7 @@ if ( havePointerLock ) {
 	var pointerlockerror = function ( event ) {
 
 		instructions.style.display = '';
+		socket.emit('land');
 
 	}
 
@@ -92,10 +97,10 @@ if ( havePointerLock ) {
 }
 
 init();
-animate();
+control();
 
 function init() {
-	controls = new PointerLockControls( {} );
+	controls = new PointerLockControls( socket );
 
 	window.addEventListener( 'resize', onWindowResize, false );
 
@@ -106,10 +111,10 @@ function onWindowResize() {
 
 }
 
-function animate() {
-	controls.update( Date.now() - time );
+function control() {
 
-	time = Date.now();
-
+	setInterval(function() {
+		controls.update( );
+	}, 50);
 }
 

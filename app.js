@@ -12,12 +12,6 @@ var express = require('express')
   , fs = require('fs')
   , io = require('socket.io');
 
-var client = arDrone.createClient();
-
-client.on('navdata', function() {
-  console.log('recieving navdata');
-});
-
 var lastPng = fs.readFileSync('./test/image.png');
 pngStream = client.createPngStream();
 pngStream
@@ -56,8 +50,60 @@ http = http.createServer(app).listen(app.get('port'), function(){
 
 io = io.listen(http);
 
+var client = arDrone.createClient();
+
+var lastPng;
+pngStream = client.createPngStream();
+pngStream
+  //.on('error', console.log)
+  .on('data', function(pngBuffer) {
+    lastPng = pngBuffer;
+  });
+
+client.on('navdata', function(data) {
+  console.log('recieving navdata');
+});
+
+var speed = 0.1;
+var mouseSensibility = 10;
+
 io.sockets.on('connection', function (socket) {
   socket.on('movement', function (data) {
     console.log(data);
+    client.stop();
+    if (!data) return;
+    var directions = data.directions;
+    var mouse = data.mouse;
+    if (directions) {
+      directions[0] && client.front(speed);
+      directions[1] && client.right(speed);
+      directions[2] && client.back(speed);
+      directions[3] && client.left(speed);
+    }
+    if (mouse) {
+      if (!isNaN(mouse[0])) {
+        if (mouse[0] < -mouseSensibility) {
+          client.up(speed);
+        } else if (mouseSensibility < mouse[0]) {
+          client.down(speed);
+        }
+      }
+      if (!isNaN(mouse[1])) {
+        if (mouse[1] < -mouseSensibility) {
+          client.counterClockwise(speed);
+        } else if (mouseSensibility < mouse[1]) {
+          client.clockwise(speed);
+        }
+      }
+    }
+  });
+  socket.on('takeoff', function () {
+    console.log('takeoff');
+    client.takeoff();
+  });
+  socket.on('land', function () {
+    console.log('land');
+    client.stop();
+    client.land();
   });
 });
