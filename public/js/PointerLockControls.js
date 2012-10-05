@@ -46,7 +46,11 @@ var PointerLockControls = function ( socket ) {
 			case 32: // space
 				socket.emit('animation', ['flipAhead', 1000] );
 				break;
+			case 189: // minus
+				socket.emit('light', ['doubleMissile', 5, 2] );
+				break;
 		}
+		console.log(event.keyCode);
 
 	};
 
