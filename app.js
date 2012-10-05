@@ -21,7 +21,7 @@ client.on('navdata', function() {
 var lastPng;
 pngStream = client.createPngStream();
 pngStream
-  .on('error', console.log)
+  //.on('error', console.log)
   .on('data', function(pngBuffer) {
     lastPng = pngBuffer;
   });
@@ -62,6 +62,9 @@ io = io.listen(http);
 
 io.sockets.on('connection', function (socket) {
   socket.on('movement', function (data) {
+    console.log(data);
+  });
+  socket.on('mousemove', function (data) {
     console.log(data);
   });
 });
