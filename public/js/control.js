@@ -2,8 +2,8 @@
 var controls,time = Date.now();
 
 var objects = [];
-var is_takeoff = true;
-var is_land = true;
+var is_takeoff = false;
+var is_land = false;
 
 var blocker = document.getElementById( 'blocker' );
 var instructions = document.getElementById( 'instructions' );
@@ -59,6 +59,7 @@ if ( havePointerLock ) {
 	instructions.addEventListener( 'click', function ( event ) {
 
 		instructions.style.display = 'none';
+		takeoff();
 
 		// Ask the browser to lock the pointer
 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
