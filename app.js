@@ -10,10 +10,13 @@ var express = require('express')
   , path = require('path')
   , arDrone = require('ar-drone')
   , fs = require('fs');
+  , io = require('socket.io');
 
 var client = arDrone.createClient();
 
-var app = express();
+client.on('navdata', function() {
+  console.log('recieving navdata');
+});
 
 var lastPng;
 pngStream = client.createPngStream();
@@ -22,6 +25,8 @@ pngStream
   .on('data', function(pngBuffer) {
     lastPng = pngBuffer;
   });
+
+var app = express();
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -49,6 +54,14 @@ app.get('/image.png', function(req, res) {
   //res.end(lastPng);
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+http = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
+});
+
+io = io.listen(http);
+
+io.sockets.on('connection', function (socket) {
+  socket.on('movement', function (data) {
+    console.log(data);
+  });
 });
