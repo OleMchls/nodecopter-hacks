@@ -53,8 +53,8 @@ http = http.createServer(app).listen(app.get('port'), function(){
 io = io.listen(http);
 
 
-var speed = 0.1;
-var mouseSensibility = 10;
+var speed = 1;
+var mouseSensibility = 2;
 
 io.sockets.on('connection', function (socket) {
   socket.on('movement', function (data) {
@@ -72,16 +72,16 @@ io.sockets.on('connection', function (socket) {
     if (mouse) {
       if (!isNaN(mouse[0])) {
         if (mouse[0] < -mouseSensibility) {
-          client.up(speed);
+          client.counterClockwise(speed);
         } else if (mouseSensibility < mouse[0]) {
-          client.down(speed);
+          client.clockwise(speed);
         }
       }
       if (!isNaN(mouse[1])) {
         if (mouse[1] < -mouseSensibility) {
-          client.counterClockwise(speed);
+          client.up(speed);
         } else if (mouseSensibility < mouse[1]) {
-          client.clockwise(speed);
+          client.down(speed);
         }
       }
     }

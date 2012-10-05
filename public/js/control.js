@@ -2,7 +2,7 @@
 var controls,time = Date.now();
 
 var objects = [];
-var is_takeoff = true;
+var is_takeoff = false;
 var is_land = true;
 
 var blocker = document.getElementById( 'blocker' );
@@ -59,6 +59,7 @@ if ( havePointerLock ) {
 	instructions.addEventListener( 'click', function ( event ) {
 
 		instructions.style.display = 'none';
+		takeoff();
 
 		// Ask the browser to lock the pointer
 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
@@ -121,9 +122,12 @@ function control() {
 }
 
 function takeoff() {
+	console.log('takeoff', is_takeoff)
 	if (is_takeoff == false) {
 		socket.emit('takeoff');
-		controls.enabled = true;
+		//controls.enabled = true;
+		setTimeout(function(){controls.enable()}, 1000)
+		
 	}
 
 	is_land = false;
@@ -131,11 +135,11 @@ function takeoff() {
 
 function land() {
 	if (is_land == false) {
-		controls.enabled = false;
+		//controls.enabled = false;
+		controls.disable();
 		socket.emit('land');
 	}
 
 	is_takeoff = false;
 
 }
-

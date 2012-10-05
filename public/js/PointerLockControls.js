@@ -94,4 +94,12 @@ var PointerLockControls = function ( socket ) {
 
 	};
 
+	this.enable = function() {
+		scope.enabled = true;
+	}
+
+	this.disable = function() {
+		scope.enabled = false;
+	}
+
 };
