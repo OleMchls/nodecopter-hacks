@@ -9,7 +9,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , arDrone = require('ar-drone')
-  , fs = require('fs');
+  , fs = require('fs')
   , io = require('socket.io');
 
 var client = arDrone.createClient();
