@@ -53,26 +53,29 @@ http = http.createServer(app).listen(app.get('port'), function(){
 io = io.listen(http);
 
 client.on('navdata', function navigationData(data) {
-  console.log("===== WOHOOO!!! NavData FTW!!!! =====");
+  //console.log("===== WOHOOO!!! NavData FTW!!!! =====");
 });
 
 var speed = 1;
 var mouseSensibility = 2;
 var isFlipping = false;
+var lastDirections = [false,false,false,false]
 
 io.sockets.on('connection', function (socket) {
   socket.on('movement', function (data) {
     if (isFlipping) return;
     console.log(data);
-    client.stop();
-    if (!data) return;
-    var directions = data.directions;
-    var mouse = data.mouse;
-    if (directions) {
-      directions[0] && client.front(speed);
-      directions[1] && client.right(speed);
-      directions[2] && client.back(speed);
-      directions[3] && client.left(speed);
+    if (lastDirections != directions) {
+        client.stop();
+      if (!data) return;
+      var directions = data.directions;
+      var mouse = data.mouse;
+      if (directions) {
+        directions[0] && client.front(speed);
+        directions[1] && client.right(speed);
+        directions[2] && client.back(speed);
+        directions[3] && client.left(speed);
+      }
     }
     if (mouse) {
       if (!isNaN(mouse[0])) {
@@ -105,10 +108,15 @@ io.sockets.on('connection', function (socket) {
     console.log(data);
     client.stop();
     if (!data) return;
-    client.animate(data[0], data[1], data[2]);
+    client.animateLeds(data[0], data[1], data[2]);
+
   });
   socket.on('takeoff', function () {
     console.log('takeoff');
+    isFlipping = true;
+    setTimeout(function(){
+      isFlipping = false
+    }, 3000);
     client.takeoff();
   });
   socket.on('land', function () {

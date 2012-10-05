@@ -47,7 +47,7 @@ var PointerLockControls = function ( socket ) {
 				socket.emit('animation', ['flipAhead', 1000] );
 				break;
 			case 189: // minus
-				socket.emit('light', ['doubleMissile', 5, 2] );
+				socket.emit('light', ['doubleMissile', 10, 2] );
 				break;
 		}
 		console.log(event.keyCode);

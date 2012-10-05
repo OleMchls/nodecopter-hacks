@@ -118,15 +118,16 @@ function control() {
 
 	setInterval(function() {
 		controls.update( );
-	}, 100);
+	}, 250);
 }
 
 function takeoff() {
 	if (is_takeoff == false) {
+		controls.disable();
 		socket.emit('takeoff');
 		//controls.enabled = true;
-		setTimeout(function(){controls.enable()}, 1000)
-		
+		setTimeout(function(){controls.enable()}, 2000)
+		is_takeoff = true;
 	}
 
 	is_land = false;
