@@ -12,6 +12,8 @@ var express = require('express')
   , fs = require('fs')
   , io = require('socket.io');
 
+var client = arDrone.createClient();
+
 var lastPng = fs.readFileSync('./test/image.png');
 pngStream = client.createPngStream();
 pngStream
@@ -50,7 +52,7 @@ http = http.createServer(app).listen(app.get('port'), function(){
 
 io = io.listen(http);
 
-var client = arDrone.createClient();
+
 
 var lastPng;
 pngStream = client.createPngStream();
