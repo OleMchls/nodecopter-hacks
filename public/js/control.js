@@ -122,7 +122,6 @@ function control() {
 }
 
 function takeoff() {
-	console.log('takeoff', is_takeoff)
 	if (is_takeoff == false) {
 		socket.emit('takeoff');
 		//controls.enabled = true;
@@ -143,3 +142,4 @@ function land() {
 	is_takeoff = false;
 
 }
+

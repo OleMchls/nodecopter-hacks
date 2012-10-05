@@ -84,8 +84,15 @@ var PointerLockControls = function ( socket ) {
 
 	this.enabled = false;
 
-	this.update = function ( delta ) {
+	this.enable = function (  ) {
+		scope.enabled = true;
+	};
 
+	this.disable = function () {
+		scope.enabled = false;
+	}
+
+	this.update = function ( ) {
 		if ( scope.enabled === false ) return;
 
 		socket.emit('movement', { directions: [ moveForward, moveRight, moveBackward, moveLeft], mouse: [mousemove.x, mousemove.y]});
