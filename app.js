@@ -52,8 +52,16 @@ http = http.createServer(app).listen(app.get('port'), function(){
 
 io = io.listen(http);
 
+var lastDroneState = null;
 client.on('navdata', function navigationData(data) {
-  //console.log("===== WOHOOO!!! NavData FTW!!!! =====");
+  if (lastDroneState) {
+    for (key in lastDroneState) {
+      if (lastDroneState[key] != data.droneState) {
+        console.log("NAVDATA => " + key + " has become " + (data.droneState[key] ? "TRUE" : "FALSE"));
+      }
+    }
+  }
+  lastDroneState = data.droneState;
 });
 
 var speed = 1;
