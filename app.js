@@ -52,10 +52,6 @@ http = http.createServer(app).listen(app.get('port'), function(){
 
 io = io.listen(http);
 
-client.on('navdata', function navigationData(data) {
-  console.log("===== WOHOOO!!! NavData FTW!!!! =====");
-});
-
 var speed = 1;
 var mouseSensibility = 2;
 
@@ -99,7 +95,7 @@ io.sockets.on('connection', function (socket) {
     console.log(data);
     client.stop();
     if (!data) return;
-    client.animate(data[0], data[1], data[2]);
+    client.animateLeds(data[0], data[1], data[2]);
   });
   socket.on('takeoff', function () {
     console.log('takeoff');
