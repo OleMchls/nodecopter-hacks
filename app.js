@@ -7,7 +7,33 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , arDrone = require('ar-drone');
+
+var client = arDrone.createClient();
+
+client.takeoff();
+
+client
+  /*.after(5000, function() {
+    this.clockwise(0.5);
+  })*/
+  .after(2000, function() {
+    this.front(0.5);
+  })
+  .after(2000, function() {
+    this.left(0.5);
+  })
+  .after(2000, function() {
+    this.back(0.5);
+  })
+  .after(2000, function() {
+    this.right(0.5);
+  })
+  .after(3000, function() {
+    this.stop();
+    this.land();
+  });
 
 var app = express();
 
