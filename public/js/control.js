@@ -117,13 +117,13 @@ function control() {
 
 	setInterval(function() {
 		controls.update( );
-	}, 50);
+	}, 100);
 }
 
 function takeoff() {
 	if (is_takeoff == false) {
 		socket.emit('takeoff');
-		controls.enabled = true;
+		controls.enable();
 	}
 
 	is_land = false;
@@ -131,7 +131,7 @@ function takeoff() {
 
 function land() {
 	if (is_land == false) {
-		controls.enabled = false;
+		controls.disable();
 		socket.emit('land');
 	}
 
