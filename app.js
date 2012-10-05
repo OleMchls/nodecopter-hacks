@@ -52,6 +52,9 @@ http = http.createServer(app).listen(app.get('port'), function(){
 
 io = io.listen(http);
 
+client.on('navdata', function navigationData(data) {
+  console.log("===== WOHOOO!!! NavData FTW!!!! =====");
+});
 
 var speed = 1;
 var mouseSensibility = 2;
