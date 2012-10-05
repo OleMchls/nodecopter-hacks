@@ -18,7 +18,7 @@ client.on('navdata', function() {
   console.log('recieving navdata');
 });
 
-var lastPng;
+var lastPng = fs.readFileSync('./test/image.png');
 pngStream = client.createPngStream();
 pngStream
   .on('error', console.log)
@@ -47,11 +47,7 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/image.png', function(req, res) {
   res.writeHead(200, {'Content-Type': 'image/png'});
-  fs.readFile('./test/image.png', function (err, data) {
-    if (err) throw err;
-    res.end(data);
-  });
-  //res.end(lastPng);
+  res.end(lastPng);
 });
 
 http = http.createServer(app).listen(app.get('port'), function(){
