@@ -118,7 +118,7 @@ function control() {
 
 	setInterval(function() {
 		controls.update( );
-	}, 50);
+	}, 100);
 }
 
 function takeoff() {

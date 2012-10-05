@@ -66,9 +66,11 @@ client.on('navdata', function navigationData(data) {
 
 var speed = 1;
 var mouseSensibility = 2;
+var isFlipping = false;
 
 io.sockets.on('connection', function (socket) {
   socket.on('movement', function (data) {
+    if (isFlipping) return;
     console.log(data);
     client.stop();
     if (!data) return;
@@ -102,6 +104,10 @@ io.sockets.on('connection', function (socket) {
     client.stop();
     if (!data) return;
     client.animate(data[0], data[1]);
+    isFlipping = true;
+    setTimeout(function(){
+      isFlipping = false
+    }, data[1] * 2);
   });
   socket.on('light', function (data) {
     console.log(data);
