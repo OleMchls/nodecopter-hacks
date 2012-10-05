@@ -6,6 +6,7 @@ var PointerLockControls = function ( socket ) {
 	var moveBackward = false;
 	var moveLeft = false;
 	var moveRight = false;
+	var mousemove = {x: 0, y: 0};
 
 	var onMouseMove = function ( event ) {
 
@@ -15,7 +16,8 @@ var PointerLockControls = function ( socket ) {
 		var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
 
 		if (movementY || movementX) {
-			//socket.emit('mousemove', { x: movementX, y: movementY });
+			mousemove.x += movementX;
+			mousemove.y += movementY;
 		}
 	};
 
@@ -86,7 +88,9 @@ var PointerLockControls = function ( socket ) {
 
 		//if ( scope.enabled === false ) return;
 
-		socket.emit('movement', { directions: [ {forward: moveForward}, {right: moveRight}, {backward: moveBackward}, {left: moveLeft}], mouse: [0, 0]});
+		socket.emit('movement', { directions: [ moveForward, moveRight, moveBackward, moveLeft], mouse: [mousemove.x, mousemove.y]});
+		mousemove.x = 0;
+		mousemove.y = 0;
 
 	};
 
